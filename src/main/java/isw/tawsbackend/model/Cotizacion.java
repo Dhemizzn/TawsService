@@ -30,9 +30,6 @@ public class Cotizacion {
     @Column(name = "region_destino")
     private String regionDestino;
 
-    @Column(name = "lugar_turistico")
-    private String lugarTuristico;
-
     @Column(name = "fecha_partida")
     private LocalDate fechaPartida;
 

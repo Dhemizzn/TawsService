@@ -9,7 +9,6 @@ import isw.tawsbackend.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,9 +19,10 @@ public class ClienteService {
 
     public ClienteResponse registrarCliente(ClienteRequest request) {
         if (clienteRepository.existsByDni_NumeroDni(request.getNumeroDni())) {
-            throw new RuntimeException("El cliente con este DNI ya esta registrado");
+            throw new RuntimeException("El cliente con este DNI ya está registrado");
         }
 
+        // Creamos las entidades hijas
         Dni dniEntidad = Dni.builder()
                 .numeroDni(request.getNumeroDni())
                 .build();
@@ -30,8 +30,8 @@ public class ClienteService {
         Ruc rucEntidad = (request.getNumeroRuc() != null) ?
                 Ruc.builder().numeroRuc(request.getNumeroRuc()).build() : null;
 
+        // Construimos el cliente con un ID generado al vuelo
         Cliente nuevoCliente = Cliente.builder()
-                .idCliente(UUID.randomUUID().toString())
                 .nombre(request.getNombre())
                 .apellidoPrimero(request.getApellidoPrimero())
                 .apellidoSegundo(request.getApellidoSegundo())
@@ -75,15 +75,20 @@ public class ClienteService {
                 .build();
     }
 
+    // Metodo para actualizar datos basicos del perfil
     public ClienteResponse actualizarPerfil(String idCliente, ClienteRequest request) {
+        // Buscamos al cliente o lanzamos error si no existe
         Cliente cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
+        // Actualizamos los campos
         cliente.setNombre(request.getNombre());
         cliente.setApellidoPrimero(request.getApellidoPrimero());
         cliente.setApellidoSegundo(request.getApellidoSegundo());
         cliente.setTelefono(request.getTelefono());
+        // Nota: Por seguridad, no actualizamos el email ni la password aqui directamente
 
+        // Guardamos los cambios
         Cliente clienteActualizado = clienteRepository.save(cliente);
 
         return mapearAResponse(clienteActualizado);

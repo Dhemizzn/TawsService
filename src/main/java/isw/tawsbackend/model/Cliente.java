@@ -12,7 +12,8 @@ import lombok.*;
 public class Cliente {
 
     @Id
-    @Column(name = "id_cliente")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cliente", insertable = false, updatable = false)
     private String idCliente;
 
     private String nombre;
@@ -36,7 +37,7 @@ public class Cliente {
     private Ruc ruc;
 
     // Campo obligatorio para el inicio de sesion (HU01)
-    @Column(name = "password", nullable = false)
+    @Column(name = "contrasena", nullable = false)
     private String password;
 
 }
