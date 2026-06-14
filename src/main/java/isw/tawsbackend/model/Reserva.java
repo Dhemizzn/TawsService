@@ -3,12 +3,14 @@ package isw.tawsbackend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "reserva")
+@Table(name = "reserva", schema = "TAWS")
 public class Reserva {
 
     @Id
@@ -16,10 +18,10 @@ public class Reserva {
     private String idReserva;
 
     @Column(name = "fecha_inicial")
-    private java.time.LocalDate fechaInicial;
+    private LocalDate fechaInicial;
 
     @Column(name = "fecha_final")
-    private java.time.LocalDate fechaFinal;
+    private LocalDate fechaFinal;
 
     private Integer precio;
 
@@ -28,3 +30,4 @@ public class Reserva {
     private Empresa hotel;
 
 }
+
