@@ -1,4 +1,4 @@
 package isw.tawsbackend.dto;
 
-public class ActividadRequest {
+public class AuthLoginRequest {
 }
