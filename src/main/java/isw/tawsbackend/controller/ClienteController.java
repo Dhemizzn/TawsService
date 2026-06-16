@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(path = "api/v1/cliente")
+@RequestMapping("/api/v1/cliente")
 public class ClienteController {
 
     @Autowired
