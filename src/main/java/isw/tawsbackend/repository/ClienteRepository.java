@@ -15,6 +15,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, String> {
     // Retorna true si el documento de identidad ya se encuentra registrado.
     boolean existsByDni_NumeroDni(String numeroDni);
 
+    boolean existsByEmail(String email);
     // Consulta personalizada para recuperar un cliente utilizando su correo electronico.
     // Se utiliza Optional para manejar de forma segura el caso en que el correo no exista.
     Optional<Cliente> findByEmail(String email);

@@ -21,8 +21,10 @@ public class ClienteService {
         if (clienteRepository.existsByDni_NumeroDni(request.getNumeroDni())) {
             throw new RuntimeException("El cliente con este DNI ya está registrado");
         }
+        if(clienteRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("El correo que intenta registrar ya existe");
+        }
 
-        // Creamos las entidades hijas
         Dni dniEntidad = Dni.builder()
                 .numeroDni(request.getNumeroDni())
                 .build();
@@ -30,7 +32,6 @@ public class ClienteService {
         Ruc rucEntidad = (request.getNumeroRuc() != null) ?
                 Ruc.builder().numeroRuc(request.getNumeroRuc()).build() : null;
 
-        // Construimos el cliente con un ID generado al vuelo
         Cliente nuevoCliente = Cliente.builder()
                 .nombre(request.getNombre())
                 .apellidoPrimero(request.getApellidoPrimero())
