@@ -1,5 +1,6 @@
 package isw.tawsbackend.service;
 
+import isw.tawsbackend.dto.AuthLoginRequest;
 import isw.tawsbackend.dto.ClienteRequest;
 import isw.tawsbackend.dto.ClienteResponse;
 import isw.tawsbackend.model.Cliente;
@@ -18,6 +19,12 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public ClienteResponse registrarCliente(ClienteRequest request) {
+        try {
+            ClienteValidator.validateRegisterData(request);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
         if (clienteRepository.existsByDni_NumeroDni(request.getNumeroDni())) {
             throw new RuntimeException("El cliente con este DNI ya está registrado");
         }
@@ -47,11 +54,17 @@ public class ClienteService {
         return mapearAResponse(clienteGuardado);
     }
 
-    public ClienteResponse login(String email, String password) {
-        Cliente cliente = clienteRepository.findByEmail(email)
+    public ClienteResponse login(AuthLoginRequest request) {
+        try {
+            ClienteValidator.validateLoginData(request);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        Cliente cliente = clienteRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Credenciales invalidas"));
 
-        if (!cliente.getPassword().equals(password)) {
+        if (!cliente.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Credenciales invalidas");
         }
         return mapearAResponse(cliente);
