@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional //Se van a borrar los datos despues de cada test
+@Transactional
 class ClienteRepositoryTest {
 
     @Autowired
@@ -34,7 +34,7 @@ class ClienteRepositoryTest {
                 .nombre("Dhemiz")
                 .apellidoPrimero("Perez")
                 .apellidoSegundo("Gomez")
-                .email("test1@uni.edu.pe")
+                .email("test1" + numeroDni + "@uni.edu.pe")
                 .dni(dni)
                 .password("123456")
                 .build();
