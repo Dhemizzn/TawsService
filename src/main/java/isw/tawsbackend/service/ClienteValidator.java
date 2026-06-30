@@ -8,16 +8,22 @@ public class ClienteValidator {
     private static int MAXSIZE_PASSWORD = 30;
     private static int MAXSIZE_NOMBRE = 50;
     private static int MAXSIZE_APELLIDO = 50;
+
+    private static int MINSIZE_PASSWORD = 8;
+
     private static int SIZE_DNI = 8;
     private static int SIZE_TELEFONO = 9;
 
-    private static String EMAIL_REGEX = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-    private static String NOMBRE_REGEX = "[a-zA-Z]+";
-    private static String APELLIDO_REGEX = "[a-zA-Z][a-zA-Z ]+[a-zA-Z]";
+    private static String EMAIL_REGEX = "^[\\w!#$%&'*+/=?`{|}~^-ñÑ]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-ñÑ]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    private static String NOMBRE_REGEX = "[a-zA-ZñÑ]+";
+    private static String APELLIDO_REGEX = "[a-zA-ZñÑ][a-zA-ZñÑ ]+[a-zA-ZñÑ]";
     private static String TELEFONO_REGEX = "[0-9]+";
     private static String DNI_REGEX = "[0-9]+";
 
     public static void validateLoginData(AuthLoginRequest request) {
+        request.setEmail(request.getEmail().trim());
+        // password does not require it since space is valid in any part of a password.
+
         if (request.getEmail().isEmpty() || request.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Llenar todos los campos.");
         }
@@ -25,12 +31,21 @@ public class ClienteValidator {
                 || !request.getEmail().matches(EMAIL_REGEX)) {
             throw new IllegalArgumentException("Formato de correo inválido: Debe tener forma similar a \"*@*.*\" con máximo de 100 caracteres.");
         }
-        if (request.getPassword().length() > MAXSIZE_PASSWORD) {
-            throw new IllegalArgumentException("Formato de contraseña inválido: Debe tener 30 caracteres máximo");
+        if (request.getPassword().length() > MAXSIZE_PASSWORD
+            || request.getPassword().length() < MINSIZE_PASSWORD) {
+            throw new IllegalArgumentException("Formato de contraseña inválido: Debe tener de 8 a 30 caracteres.");
         }
     }
 
     public static void validateRegisterData(ClienteRequest request) {
+        request.setEmail(request.getEmail());
+        request.setApellidoPrimero(request.getApellidoPrimero());
+        request.setApellidoSegundo(request.getApellidoSegundo());
+        request.setNombre(request.getNombre());
+        request.setNumeroDni(request.getNumeroDni());
+        request.setTelefono(request.getTelefono());
+        // password does not require it since space is valid in any part of a password.
+
         if (request.getEmail().isEmpty() || request.getPassword().isEmpty() || request.getApellidoPrimero().isEmpty()
                 || request.getApellidoSegundo().isEmpty() || request.getNombre().isEmpty() || request.getNumeroDni().isEmpty()
                 || request.getTelefono().isEmpty()) {
@@ -58,7 +73,8 @@ public class ClienteValidator {
                 || !request.getNumeroDni().matches(DNI_REGEX)) {
             throw new IllegalArgumentException("Formato de DNI inválido: Debe tener 8 dígitos exactos.");
         }
-        if (request.getPassword().length() > MAXSIZE_PASSWORD) {
+        if (request.getPassword().length() > MAXSIZE_PASSWORD
+                || request.getPassword().length() < MINSIZE_PASSWORD) {
             throw new IllegalArgumentException("Formato de contraseña inválido: Debe tener 30 caracteres máximo");
         }
     }
